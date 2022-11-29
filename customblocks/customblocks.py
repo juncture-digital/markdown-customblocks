@@ -56,8 +56,10 @@ class CustomBlocksExtension(Extension):
 class CustomBlocksProcessor(BlockProcessor):
     # Detects headlines
     RE_HEADLINE = re.compile(
-        r'(?:^|\n)::: *' # marker
-        r'([\w\-]+)' # keyword
+        # r'(?:^|\n)::: *' # marker
+        # r'([\w\-]+)' # keyword
+        r'(?:^|\n)\. *' # marker
+        r'([a-z0-9]+-[a-z0-9\-]+)' # keyword
         r'(?: +(?:[\w]+=)?(' # params (optional keyword)
             r"'(?:\\.|[^'])*'|" # single quoted
             r'"(?:\\.|[^"])*"|' # double quoted
@@ -222,7 +224,8 @@ class CustomBlocksProcessor(BlockProcessor):
             _installedGenerators(),
             **self.config['generators']
         )
-        generator = self._getGenerator(generators.get(blocktype, container))
+        # generator = self._getGenerator(generators.get(blocktype, container))
+        generator = self._getGenerator(generators.get(blocktype, self.config['fallback']))
 
         ctx = ns()
         ctx.type = blocktype
